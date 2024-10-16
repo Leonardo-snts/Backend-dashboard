@@ -11,7 +11,7 @@
 # print(password)
 
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import pandas as pd
 from flask_cors import CORS
 
@@ -96,11 +96,38 @@ def get_top_stock():
     return jsonify(category_stock.to_dict(orient="records"))
 
 # 6. Vendas por Estilo ao Longo do Tempo
-@app.route('/api/sales-by-style-over-time', methods=['GET'])
-def get_sales_by_style_over_time():
+@app.route('/api/sales-qty-over-time', methods=['GET'])
+def get_sales_by_time():
+    # Parâmetro para definir o agrupamento (dia, mês ou ano)
+    group_by = request.args.get('group_by', 'D')  # O padrão será 'M' (mês)
+
     amazon_sales, _, _, _, _ = load_data()
-    data = amazon_sales.groupby(['Date', 'Style'])['Qty'].sum().reset_index()
-    return jsonify(data.to_dict(orient="records"))
+
+    # Converter a coluna 'Date' para o tipo datetime
+    amazon_sales['Date'] = pd.to_datetime(amazon_sales['Date'])
+
+    # Definir a frequência de agrupamento com base no parâmetro
+    if group_by == 'D':  # Dia
+        freq = 'D'
+        date_format = '%Y-%m-%d'
+    elif group_by == 'Y':  # Ano
+        freq = 'Y'
+        date_format = '%Y'
+    else:  # Mês (padrão)
+        freq = 'M'
+        date_format = '%Y-%m'
+
+    # Agrupar por data (dia, mês ou ano) somando as quantidades vendidas ('Qty')
+    sales_by_time = amazon_sales.groupby(pd.Grouper(key='Date', freq=freq))['Qty'].sum().reset_index()
+
+    # Renomear a coluna 'Date' para 'Time' e formatar conforme necessário
+    sales_by_time['Time'] = sales_by_time['Date'].dt.strftime(date_format)
+
+    # Remover a coluna 'Date' e manter apenas 'Time' e 'Qty'
+    sales_by_time = sales_by_time[['Time', 'Qty']]
+
+    # Retornar os dados como JSON
+    return jsonify(sales_by_time.to_dict(orient="records"))
 
 # 7. Comparação de Preço Original vs Final
 @app.route('/api/price-original-vs-final', methods=['GET'])
