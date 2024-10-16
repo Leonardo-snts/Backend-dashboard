@@ -29,16 +29,6 @@ def load_data():
     # expenses = pd.read_csv('data/Expense IIGF.csv')
     return amazon_sales, international_sale, may_2022, march_2021, sale_report #,warehouse_comparison, expenses
 
-# Gráfico de produtos por Status
-@app.route('/api/produtos-status', methods=['GET'])
-def get_produtos_status ():
-    amazon_sales, _, _, _, _ = load_data()
-    status_counts = amazon_sales['Status'].value_counts()
-    total = status_counts.sum()
-    status_percentages = (status_counts / total) *100
-    data = status_percentages.reset_index().rename(columns={'index':'Status', 'Status': 'Percentage'})
-    return jsonify(data.to_dict(orient="records"))
-
 # 1. Vendas por Estado (Amazon)
 @app.route('/api/amazon-sales-by-state', methods=['GET'])
 def get_amazon_sales_by_state():
@@ -68,63 +58,79 @@ def get_price_comparison():
     return jsonify(data.to_dict(orient="records"))
 
 # 5. Peso vs Quantidade Vendida
-@app.route('/api/weight-vs-qty', methods=['GET'])
-def get_weight_vs_qty():
-    #amazon_sales, _, may_2022, _, _ = load_data()
-    
-    # Fazer a junção entre amazon_sales e may_2022 na coluna 'SKU'
-    # merged_data = pd.merge(amazon_sales[['SKU', 'Qty']], may_2022[['SKU', 'Weight']], on='SKU', how='inner')
-    
-    # Agrupar pelos valores de peso e somar a quantidade
-    # data = merged_data.groupby('Weight')['Qty'].sum().reset_index()
-    
-    amazon_sales = pd.read_csv('data/Amazon Sale Report.csv')
-    may_2022 = pd.read_csv('data/May-2022.csv')
+# @app.route('/api/weight-vs-qty', methods=['GET'])
+# def get_weight_vs_qty():
+#     # Carregar os dados
+#     amazon_sales = pd.read_csv('data/Amazon Sale Report.csv')
+#     may_2022 = pd.read_csv('data/May-2022.csv')
 
-    amazon_sales['Source'] = 'Amazon Sales'
-    may_2022['Source'] = 'May-2022'
+#     # Verificar se ambos os arquivos têm o mesmo número de linhas
+#     min_length = min(len(amazon_sales), len(may_2022))
 
-    combined_data = pd.concat([amazon_sales['Qty'], may_2022['Weight']], ignore_index=True)
-    combined_data.to_csv('data/combined_data.csv')
-    comb_data = pd.read_csv('data/combined_data.csv')
+#     # Pegar a quantidade da amazon_sales e o peso do may_2022 até o comprimento mínimo
+#     qty_data = amazon_sales['Qty'][:min_length]
+#     weight_data = may_2022['Weight'][:min_length]
 
-    data = comb_data[['Qty', 'Weight']]
-    
-    return jsonify(data.to_dict(orient="records"))
+#     # Criar um novo DataFrame com ambas as colunas
+#     combined_data = pd.DataFrame({
+#         'Qty': qty_data,
+#         'Weight': weight_data
+#     })
 
-# 6. Produtos com Maior Estoque
+#     # Converter os dados para JSON e retornar a resposta
+#     return jsonify(combined_data.to_dict(orient="records"))
+
+# 5. Produtos com Maior Estoque
 @app.route('/api/top-stock', methods=['GET'])
 def get_top_stock():
-    _, _, expenses, _, _ = load_data()
-    data = expenses[['SKU', 'Stock']].groupby('SKU').sum().reset_index()
-    return jsonify(data.to_dict(orient="records"))
+    # Carregar os dados do sale_report
+    _, _, _, _, sale_report = load_data()
 
-# 7. Vendas por Estilo ao Longo do Tempo
+    # Agrupar por 'Category' e somar o 'Stock' correspondente
+    category_stock = sale_report.groupby('Category')['Stock'].sum().reset_index()
+
+    # Renomear as colunas para uma representação mais clara
+    category_stock = category_stock.rename(columns={'Category': 'Categoria', 'Stock': 'Estoque'})
+
+    # Retornar os dados em formato JSON
+    return jsonify(category_stock.to_dict(orient="records"))
+
+# 6. Vendas por Estilo ao Longo do Tempo
 @app.route('/api/sales-by-style-over-time', methods=['GET'])
 def get_sales_by_style_over_time():
     amazon_sales, _, _, _, _ = load_data()
     data = amazon_sales.groupby(['Date', 'Style'])['Qty'].sum().reset_index()
     return jsonify(data.to_dict(orient="records"))
 
-# 8. Comparação de Preço Original vs Final
+# 7. Comparação de Preço Original vs Final
 @app.route('/api/price-original-vs-final', methods=['GET'])
 def get_price_original_vs_final():
     amazon_sales, _, _, _, _ = load_data()
     data = amazon_sales[['SKU', 'MRP Old', 'Final MRP']].groupby('SKU').mean().reset_index()
     return jsonify(data.to_dict(orient="records"))
 
-# 9. Vendas B2B vs Outros Canais
+# 8. Vendas B2B vs Outros Canais
 @app.route('/api/sales-b2b', methods=['GET'])
 def get_sales_b2b():
     amazon_sales, _, _, _, _ = load_data()
     data = amazon_sales.groupby('sales chanel')['Amount'].sum().reset_index()
     return jsonify(data.to_dict(orient="records"))
 
-# 10. Comparação de Preços entre Plataformas
+# 9. Comparação de Preços entre Plataformas
 @app.route('/api/platform-price-comparison', methods=['GET'])
 def get_platform_price_comparison():
     _, warehouse_comparison, _, _, _ = load_data()
     data = warehouse_comparison[['Sku', 'Amazon MRP', 'Flipkart MRP', 'Paytm MRP', 'Snapdeal MRP']].dropna()
+    return jsonify(data.to_dict(orient="records"))
+
+# 10. Gráfico de produtos por Status
+@app.route('/api/produtos-status', methods=['GET'])
+def get_produtos_status ():
+    amazon_sales, _, _, _, _ = load_data()
+    status_counts = amazon_sales['Status'].value_counts()
+    total = status_counts.sum()
+    status_percentages = (status_counts / total) *100
+    data = status_percentages.reset_index().rename(columns={'index':'Status', 'Status': 'Percentage'})
     return jsonify(data.to_dict(orient="records"))
 
 if __name__ == '__main__':
