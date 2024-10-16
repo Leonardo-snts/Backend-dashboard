@@ -29,6 +29,16 @@ def load_data():
     # expenses = pd.read_csv('data/Expense IIGF.csv')
     return amazon_sales, international_sale, may_2022, march_2021, sale_report #,warehouse_comparison, expenses
 
+# Gráfico de produtos por Status
+@app.route('/api/produtos-status', methods=['GET'])
+def get_produtos_status ():
+    amazon_sales, _, _, _, _ = load_data()
+    status_counts = amazon_sales['Status'].value_counts()
+    total = status_counts.sum()
+    status_percentages = (status_counts / total) *100
+    data = status_percentages.reset_index().rename(columns={'index':'Status', 'Status': 'Percentage'})
+    return jsonify(data.to_dict(orient="records"))
+
 # 1. Vendas por Estado (Amazon)
 @app.route('/api/amazon-sales-by-state', methods=['GET'])
 def get_amazon_sales_by_state():
@@ -60,13 +70,25 @@ def get_price_comparison():
 # 5. Peso vs Quantidade Vendida
 @app.route('/api/weight-vs-qty', methods=['GET'])
 def get_weight_vs_qty():
-    amazon_sales, _, may_2022, _, _ = load_data()
+    #amazon_sales, _, may_2022, _, _ = load_data()
     
     # Fazer a junção entre amazon_sales e may_2022 na coluna 'SKU'
-    merged_data = pd.merge(amazon_sales[['SKU', 'Qty']], may_2022[['SKU', 'Weight']], on='SKU', how='inner')
+    # merged_data = pd.merge(amazon_sales[['SKU', 'Qty']], may_2022[['SKU', 'Weight']], on='SKU', how='inner')
     
     # Agrupar pelos valores de peso e somar a quantidade
-    data = merged_data.groupby('Weight')['Qty'].sum().reset_index()
+    # data = merged_data.groupby('Weight')['Qty'].sum().reset_index()
+    
+    amazon_sales = pd.read_csv('data/Amazon Sale Report.csv')
+    may_2022 = pd.read_csv('data/May-2022.csv')
+
+    amazon_sales['Source'] = 'Amazon Sales'
+    may_2022['Source'] = 'May-2022'
+
+    combined_data = pd.concat([amazon_sales['Qty'], may_2022['Weight']], ignore_index=True)
+    combined_data.to_csv('data/combined_data.csv')
+    comb_data = pd.read_csv('data/combined_data.csv')
+
+    data = comb_data[['Qty', 'Weight']]
     
     return jsonify(data.to_dict(orient="records"))
 
