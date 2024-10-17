@@ -20,7 +20,7 @@ CORS(app)  # Habilita o CORS para permitir que o frontend acesse a API
 
 # Função para carregar os dados
 def load_data():
-    amazon_sales = pd.read_csv('data/Amazon Sale Report.csv')
+    amazon_sales = pd.read_csv('data/Amazon Sale Report.csv', low_memory=False)
     international_sale = pd.read_csv('data/International sale Report.csv')
     may_2022 = pd.read_csv('data/May-2022.csv')
     march_2021 = pd.read_csv('data/P  L March 2021.csv')
@@ -99,29 +99,36 @@ def get_top_stock():
 @app.route('/api/sales-qty-over-time', methods=['GET'])
 def get_sales_by_time():
     # Parâmetro para definir o agrupamento (dia, mês ou ano)
-    group_by = request.args.get('group_by', 'D')  # O padrão será 'M' (mês)
+    group_by = request.args.get('group_by', 'D')  # O padrão será 'D' (dia)
 
     amazon_sales, _, _, _, _ = load_data()
 
-    # Converter a coluna 'Date' para o tipo datetime
-    amazon_sales['Date'] = pd.to_datetime(amazon_sales['Date'])
+    # Tentar converter a coluna 'Date' para datetime e mostrar erros de conversão
+    amazon_sales['Date'] = pd.to_datetime(amazon_sales['Date'], errors='coerce')
+
+    # Exibir dados inválidos para debug
+    # invalid_dates = amazon_sales[amazon_sales['Date'].isna()]
+    # print(f"Linhas com datas inválidas: {len(invalid_dates)}")
+
+    # Remover linhas com datas inválidas (mantendo essa parte para o fluxo normal)
+    amazon_sales = amazon_sales.dropna(subset=['Date'])
 
     # Definir a frequência de agrupamento com base no parâmetro
     if group_by == 'D':  # Dia
         freq = 'D'
-        date_format = '%Y-%m-%d'
+        output_format = '%Y-%m-%d'
     elif group_by == 'Y':  # Ano
-        freq = 'Y'
-        date_format = '%Y'
+        freq = 'YE'
+        output_format = '%Y'
     else:  # Mês (padrão)
-        freq = 'M'
-        date_format = '%Y-%m'
+        freq = 'ME'
+        output_format = '%Y-%m'
 
     # Agrupar por data (dia, mês ou ano) somando as quantidades vendidas ('Qty')
     sales_by_time = amazon_sales.groupby(pd.Grouper(key='Date', freq=freq))['Qty'].sum().reset_index()
 
     # Renomear a coluna 'Date' para 'Time' e formatar conforme necessário
-    sales_by_time['Time'] = sales_by_time['Date'].dt.strftime(date_format)
+    sales_by_time['Time'] = sales_by_time['Date'].dt.strftime(output_format)
 
     # Remover a coluna 'Date' e manter apenas 'Time' e 'Qty'
     sales_by_time = sales_by_time[['Time', 'Qty']]
@@ -132,9 +139,24 @@ def get_sales_by_time():
 # 7. Comparação de Preço Original vs Final
 @app.route('/api/price-original-vs-final', methods=['GET'])
 def get_price_original_vs_final():
-    amazon_sales, _, _, _, _ = load_data()
-    data = amazon_sales[['SKU', 'MRP Old', 'Final MRP']].groupby('SKU').mean().reset_index()
+    _, _, may_2022, _, _ = load_data()
+    
+    # Selecionar as colunas necessárias
+    data = may_2022[['Sku', 'MRP Old', 'Final MRP Old']].copy()  # Usar .copy() para evitar problemas de "view" vs "copy"
+    
+    # Converter as colunas 'MRP Old' e 'Final MRP Old' para numérico com .loc[]
+    data.loc[:, 'MRP Old'] = pd.to_numeric(data['MRP Old'], errors='coerce')
+    data.loc[:, 'Final MRP Old'] = pd.to_numeric(data['Final MRP Old'], errors='coerce')
+
+    # Remover linhas com valores NaN após a conversão
+    data = data.dropna(subset=['MRP Old', 'Final MRP Old'])
+
+    # Calcular a variação de preço (%)
+    data['Price Variation (%)'] = ((data['Final MRP Old'] - data['MRP Old']) / data['MRP Old']) * 100
+
+    # Retornar os dados como JSON
     return jsonify(data.to_dict(orient="records"))
+
 
 # 8. Vendas B2B vs Outros Canais
 @app.route('/api/sales-b2b', methods=['GET'])
