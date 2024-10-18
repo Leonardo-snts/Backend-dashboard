@@ -157,22 +157,14 @@ def get_price_original_vs_final():
     # Retornar os dados como JSON
     return jsonify(data.to_dict(orient="records"))
 
-
-# 8. Vendas B2B vs Outros Canais
-@app.route('/api/sales-b2b', methods=['GET'])
-def get_sales_b2b():
-    amazon_sales, _, _, _, _ = load_data()
-    data = amazon_sales.groupby('sales chanel')['Amount'].sum().reset_index()
-    return jsonify(data.to_dict(orient="records"))
-
-# 9. Comparação de Preços entre Plataformas
+# 8. Comparação de Preços entre Plataformas
 @app.route('/api/platform-price-comparison', methods=['GET'])
 def get_platform_price_comparison():
     _, warehouse_comparison, _, _, _ = load_data()
     data = warehouse_comparison[['Sku', 'Amazon MRP', 'Flipkart MRP', 'Paytm MRP', 'Snapdeal MRP']].dropna()
     return jsonify(data.to_dict(orient="records"))
 
-# 10. Gráfico de produtos por Status
+# 9. Gráfico de produtos por Status
 @app.route('/api/produtos-status', methods=['GET'])
 def get_produtos_status ():
     amazon_sales, _, _, _, _ = load_data()
