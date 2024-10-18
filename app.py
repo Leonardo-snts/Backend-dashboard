@@ -54,31 +54,9 @@ def get_sales_over_time():
 @app.route('/api/price-comparison', methods=['GET'])
 def get_price_comparison():
     _, _, may_2022, _, _ = load_data()
-    data = may_2022[['Sku', 'Amazon MRP', 'Flipkart MRP', 'Myntra MRP']]
+    data = may_2022[['Sku', 'Ajio MRP','Amazon FBA MRP', 'Limeroad MRP', 'Paytm MRP', 'Snapdeal MRP','Amazon MRP', 'Flipkart MRP', 'Myntra MRP']]
+    #Ajio MRP,Amazon MRP,Amazon FBA MRP,Flipkart MRP,Limeroad MRP,Myntra MRP,Paytm MRP,Snapdeal MRP
     return jsonify(data.to_dict(orient="records"))
-
-# 5. Peso vs Quantidade Vendida
-# @app.route('/api/weight-vs-qty', methods=['GET'])
-# def get_weight_vs_qty():
-#     # Carregar os dados
-#     amazon_sales = pd.read_csv('data/Amazon Sale Report.csv')
-#     may_2022 = pd.read_csv('data/May-2022.csv')
-
-#     # Verificar se ambos os arquivos têm o mesmo número de linhas
-#     min_length = min(len(amazon_sales), len(may_2022))
-
-#     # Pegar a quantidade da amazon_sales e o peso do may_2022 até o comprimento mínimo
-#     qty_data = amazon_sales['Qty'][:min_length]
-#     weight_data = may_2022['Weight'][:min_length]
-
-#     # Criar um novo DataFrame com ambas as colunas
-#     combined_data = pd.DataFrame({
-#         'Qty': qty_data,
-#         'Weight': weight_data
-#     })
-
-#     # Converter os dados para JSON e retornar a resposta
-#     return jsonify(combined_data.to_dict(orient="records"))
 
 # 5. Produtos com Maior Estoque
 @app.route('/api/top-stock', methods=['GET'])
@@ -157,12 +135,13 @@ def get_price_original_vs_final():
     # Retornar os dados como JSON
     return jsonify(data.to_dict(orient="records"))
 
-# 8. Comparação de Preços entre Plataformas
-@app.route('/api/platform-price-comparison', methods=['GET'])
-def get_platform_price_comparison():
-    _, warehouse_comparison, _, _, _ = load_data()
-    data = warehouse_comparison[['Sku', 'Amazon MRP', 'Flipkart MRP', 'Paytm MRP', 'Snapdeal MRP']].dropna()
-    return jsonify(data.to_dict(orient="records"))
+# # 8. Comparação de Preços entre Plataformas
+# @app.route('/api/platform-price-comparison', methods=['GET'])
+# def get_platform_price_comparison():
+#     _, _, may_2022, _, _ = load_data()
+#     data = may_2022[['Sku', 'Amazon MRP', 'Flipkart MRP', 'Paytm MRP', 'Snapdeal MRP']].dropna()
+#     #Ajio MRP,Amazon MRP,Amazon FBA MRP,Flipkart MRP,Limeroad MRP,Myntra MRP,Paytm MRP,Snapdeal MRP
+#     return jsonify(data.to_dict(orient="records"))
 
 # 9. Gráfico de produtos por Status
 @app.route('/api/produtos-status', methods=['GET'])
