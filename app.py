@@ -1,19 +1,9 @@
-# import dotenv
-# import os
-
-# dotenv.load_dotenv(dotenv.find_dotenv())
-
-# username = os.getenv("username")
-# password = os.getenv("password")
-
-
-# print(username)
-# print(password)
-
-
 from flask import Flask, jsonify, request
 import pandas as pd
 from flask_cors import CORS
+from opencage.geocoder import OpenCageGeocode
+import dotenv
+import os
 
 app = Flask(__name__)
 CORS(app)  # Habilita o CORS para permitir que o frontend acesse a API
@@ -135,13 +125,26 @@ def get_price_original_vs_final():
     # Retornar os dados como JSON
     return jsonify(data.to_dict(orient="records"))
 
-# # 8. Comparação de Preços entre Plataformas
-# @app.route('/api/platform-price-comparison', methods=['GET'])
-# def get_platform_price_comparison():
-#     _, _, may_2022, _, _ = load_data()
-#     data = may_2022[['Sku', 'Amazon MRP', 'Flipkart MRP', 'Paytm MRP', 'Snapdeal MRP']].dropna()
-#     #Ajio MRP,Amazon MRP,Amazon FBA MRP,Flipkart MRP,Limeroad MRP,Myntra MRP,Paytm MRP,Snapdeal MRP
-#     return jsonify(data.to_dict(orient="records"))
+# 8. Comparação de Preços entre Plataformas
+@app.route('/api/heat-map', methods=['GET'])
+def get_heat_map():
+    amazon_sales, _, _, _, _ = load_data()
+
+    # gambiarra até trocar os dados
+    country_mapping = {
+        'IN': 'India',
+        # Adicione mais mapeamentos conforme necessário
+    }
+
+    # Aplicando a substituição dos códigos
+    amazon_sales['ship-country'] = amazon_sales['ship-country'].replace(country_mapping)
+
+    # Agrupando por país e somando as vendas
+    data = amazon_sales.groupby('ship-country')['Amount'].sum().reset_index()
+
+    # Convertendo o resultado para um formato apropriado
+    return jsonify(data.to_dict(orient="records"))
+
 
 # 9. Gráfico de produtos por Status
 @app.route('/api/produtos-status', methods=['GET'])
