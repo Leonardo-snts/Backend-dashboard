@@ -1,0 +1,51 @@
+id do produto,tipo do produto,produto,valor de venda,valor de compra,status de entrega,loja que comprou,data da venda,quantidade comprada,moeda usada,cidade do envio,estado do envio,pais do envio,latitude,longitude,tipo de envio,canal de venda,preço distribuidora,preço loja 1,preço loja 2
+1,ferramentas,serra elétrica,703.29,604.89,pendente,Loja B,2024-03-03,62,EUR,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,transportadora própria,empresarial,703.29,730.23,762.23
+2,roupa,calça,312.74,276.47,enviado,Loja C,2024-05-27,32,EUR,Curitiba,PR,Brasil,-25.4284,-49.2733,transportadora própria,loja,312.74,335.74,321.31
+3,cozinha,batedeira,27.29,24.31,pendente,Loja C,2024-01-09,70,BRL,São Paulo,SP,Brasil,-23.5505,-46.6333,padrão,empresarial,27.29,27.66,29.49
+4,ferramentas,serra elétrica,704.72,694.54,cancelado,Loja B,2024-06-08,57,USD,Curitiba,PR,Brasil,-25.4284,-49.2733,transportadora própria,online,704.72,742.37,768.15
+5,eletronico,notebook,246.18,233.98,pendente,Loja A,2024-05-15,21,USD,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,expressa,loja,246.18,268.55,258.42
+6,ferramentas,serra elétrica,126.24,121.34,pendente,Loja C,2024-12-09,86,EUR,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,expressa,loja,126.24,130.63,130.65
+7,ferramentas,martelo,1078.5,905.66,pendente,Loja A,2024-11-25,11,BRL,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,padrão,empresarial,1078.5,1147.15,1123.24
+8,ferramentas,chave de fenda,441.12,431.49,pendente,Loja B,2024-09-19,8,USD,São Paulo,SP,Brasil,-23.5505,-46.6333,expressa,empresarial,441.12,463.26,456.12
+9,eletronico,smartphone,600.09,538.91,pendente,Loja C,2024-04-06,90,EUR,São Paulo,SP,Brasil,-23.5505,-46.6333,transportadora própria,online,600.09,608.49,655.74
+10,ferramentas,chave de fenda,559.26,530.61,pendente,Loja C,2024-03-28,81,USD,Curitiba,PR,Brasil,-25.4284,-49.2733,padrão,empresarial,559.26,572.09,572.26
+11,eletronico,tablet,830.27,785.37,cancelado,Loja C,2024-04-08,28,USD,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,padrão,empresarial,830.27,880.86,859.46
+12,roupa,calça,982.72,857.82,pendente,Loja C,2024-06-08,3,USD,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,padrão,empresarial,982.72,998.77,1011.67
+13,roupa,camiseta,981.19,967.48,cancelado,Loja B,2024-02-18,28,EUR,São Paulo,SP,Brasil,-23.5505,-46.6333,expressa,loja,981.19,1026.6,997.48
+14,casa,cadeira,721.32,619.63,enviado,Loja B,2024-07-05,73,EUR,São Paulo,SP,Brasil,-23.5505,-46.6333,transportadora própria,loja,721.32,743.89,783.69
+15,roupa,camiseta,91.85,81.52,cancelado,Loja B,2024-04-26,15,EUR,São Paulo,SP,Brasil,-23.5505,-46.6333,transportadora própria,empresarial,91.85,99.75,94.49
+16,cozinha,batedeira,343.73,334.9,cancelado,Loja B,2024-07-22,35,BRL,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,transportadora própria,online,343.73,356.52,352.77
+17,eletronico,smartphone,754.52,653.78,pendente,Loja A,2024-03-10,14,EUR,Curitiba,PR,Brasil,-25.4284,-49.2733,transportadora própria,loja,754.52,818.71,794.58
+18,ferramentas,serra elétrica,529.03,499.51,enviado,Loja C,2024-07-04,49,BRL,Curitiba,PR,Brasil,-25.4284,-49.2733,padrão,online,529.03,569.48,537.34
+19,roupa,meias,961.99,846.16,cancelado,Loja B,2024-01-28,57,USD,Curitiba,PR,Brasil,-25.4284,-49.2733,transportadora própria,empresarial,961.99,1043.43,1030.8
+20,cozinha,liquidificador,755.99,686.69,cancelado,Loja C,2024-11-19,86,BRL,Curitiba,PR,Brasil,-25.4284,-49.2733,transportadora própria,empresarial,755.99,794.37,783.33
+21,ferramentas,furadeira,1071.0,928.81,pendente,Loja C,2024-07-02,48,EUR,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,padrão,online,1071.0,1132.6,1131.11
+22,roupa,calça,553.25,529.71,cancelado,Loja A,2024-04-19,12,EUR,Curitiba,PR,Brasil,-25.4284,-49.2733,padrão,online,553.25,572.59,569.93
+23,cozinha,fogão,38.1,35.92,pendente,Loja A,2024-05-02,56,BRL,São Paulo,SP,Brasil,-23.5505,-46.6333,padrão,online,38.1,40.78,41.22
+24,eletronico,tablet,390.48,363.35,pendente,Loja A,2024-08-24,14,USD,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,padrão,online,390.48,399.27,429.16
+25,ferramentas,furadeira,945.52,930.07,pendente,Loja A,2024-12-23,16,EUR,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,padrão,empresarial,945.52,985.41,994.94
+26,roupa,meias,361.53,310.91,pendente,Loja C,2024-09-04,9,BRL,Curitiba,PR,Brasil,-25.4284,-49.2733,transportadora própria,empresarial,361.53,374.67,392.45
+27,roupa,meias,82.28,75.88,enviado,Loja A,2024-03-20,49,USD,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,padrão,loja,82.28,83.2,85.58
+28,ferramentas,serra elétrica,741.75,624.3,enviado,Loja B,2024-01-13,47,BRL,Curitiba,PR,Brasil,-25.4284,-49.2733,padrão,loja,741.75,758.31,761.63
+29,cozinha,geladeira,198.89,176.48,enviado,Loja A,2024-06-09,21,USD,São Paulo,SP,Brasil,-23.5505,-46.6333,expressa,empresarial,198.89,209.5,202.4
+30,eletronico,televisão,446.95,380.28,cancelado,Loja A,2024-04-20,11,EUR,São Paulo,SP,Brasil,-23.5505,-46.6333,transportadora própria,loja,446.95,486.26,473.6
+31,cozinha,liquidificador,39.42,36.15,pendente,Loja C,2024-11-22,11,BRL,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,transportadora própria,loja,39.42,42.73,43.12
+32,roupa,meias,1024.51,898.06,pendente,Loja B,2024-12-11,60,EUR,São Paulo,SP,Brasil,-23.5505,-46.6333,transportadora própria,loja,1024.51,1062.05,1059.27
+33,eletronico,smartphone,13.61,11.68,cancelado,Loja C,2024-07-07,12,BRL,Curitiba,PR,Brasil,-25.4284,-49.2733,padrão,loja,13.61,13.8,13.88
+34,casa,cama,980.66,844.85,cancelado,Loja C,2024-09-23,7,BRL,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,transportadora própria,empresarial,980.66,1020.76,997.93
+35,eletronico,notebook,935.36,831.76,cancelado,Loja C,2024-08-04,17,EUR,Curitiba,PR,Brasil,-25.4284,-49.2733,padrão,empresarial,935.36,980.08,989.98
+36,roupa,casaco,522.06,451.43,pendente,Loja A,2024-09-05,83,BRL,Curitiba,PR,Brasil,-25.4284,-49.2733,expressa,empresarial,522.06,534.83,572.25
+37,roupa,casaco,713.2,646.75,pendente,Loja C,2024-03-22,86,BRL,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,padrão,loja,713.2,735.03,760.89
+38,eletronico,notebook,550.46,533.51,pendente,Loja C,2024-12-08,62,BRL,São Paulo,SP,Brasil,-23.5505,-46.6333,padrão,online,550.46,583.31,576.08
+39,roupa,casaco,427.93,403.63,enviado,Loja B,2024-09-07,75,BRL,Curitiba,PR,Brasil,-25.4284,-49.2733,expressa,empresarial,427.93,442.85,437.33
+40,cozinha,fogão,101.8,89.97,cancelado,Loja C,2024-11-10,24,EUR,São Paulo,SP,Brasil,-23.5505,-46.6333,expressa,loja,101.8,106.37,107.44
+41,casa,sofá,906.57,803.56,cancelado,Loja A,2024-08-12,53,BRL,Curitiba,PR,Brasil,-25.4284,-49.2733,expressa,online,906.57,942.28,973.56
+42,ferramentas,chave de fenda,1082.08,963.75,pendente,Loja B,2024-05-13,76,USD,São Paulo,SP,Brasil,-23.5505,-46.6333,expressa,online,1082.08,1150.68,1124.55
+43,eletronico,televisão,44.5,43.42,pendente,Loja B,2024-08-19,16,EUR,São Paulo,SP,Brasil,-23.5505,-46.6333,padrão,empresarial,44.5,44.99,46.48
+44,ferramentas,martelo,602.65,506.22,pendente,Loja C,2024-07-04,75,BRL,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,transportadora própria,loja,602.65,658.62,648.67
+45,roupa,calça,115.65,101.61,pendente,Loja C,2024-03-23,89,EUR,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,padrão,loja,115.65,123.33,121.62
+46,ferramentas,serra elétrica,834.89,811.64,enviado,Loja C,2024-02-11,79,USD,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,transportadora própria,empresarial,834.89,848.61,916.67
+47,eletronico,smartphone,444.45,432.85,enviado,Loja C,2024-01-24,48,EUR,Curitiba,PR,Brasil,-25.4284,-49.2733,transportadora própria,empresarial,444.45,488.6,470.89
+48,eletronico,notebook,662.97,655.73,enviado,Loja C,2024-04-18,26,BRL,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,padrão,loja,662.97,712.32,690.46
+49,casa,sofá,641.22,540.25,pendente,Loja A,2024-06-04,40,BRL,São Paulo,SP,Brasil,-23.5505,-46.6333,padrão,loja,641.22,652.97,697.96
+50,cozinha,geladeira,771.66,673.45,enviado,Loja C,2024-01-04,7,EUR,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,padrão,loja,771.66,830.45,812.66

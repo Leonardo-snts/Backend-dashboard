@@ -75,8 +75,8 @@ def get_sales_by_time():
     amazon_sales['Date'] = pd.to_datetime(amazon_sales['Date'], errors='coerce')
 
     # Exibir dados inválidos para debug
-    # invalid_dates = amazon_sales[amazon_sales['Date'].isna()]
-    # print(f"Linhas com datas inválidas: {len(invalid_dates)}")
+    #invalid_dates = amazon_sales[amazon_sales['Date'].isna()]
+    #print(f"Linhas com datas inválidas: {len(invalid_dates)}")
 
     # Remover linhas com datas inválidas (mantendo essa parte para o fluxo normal)
     amazon_sales = amazon_sales.dropna(subset=['Date'])
