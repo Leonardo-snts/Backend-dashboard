@@ -1,0 +1,51 @@
+id do produto,tipo do produto,produto,valor de venda,valor de compra,status de entrega,loja que comprou,data da venda,quantidade comprada,moeda usada,cidade do envio,estado do envio,pais do envio,latitude,longitude,tipo de envio,canal de venda,preço distribuidora,preço loja 1,preço loja 2
+1,cozinha,batedeira,283.32,253.69,enviado,Loja B,2024-03-24,10,USD,Nova York,NY,EUA,40.7128,-74.006,transportadora própria,loja,283.32,290.36,297.89
+2,casa,cadeira,787.57,723.16,cancelado,Loja A,2024-04-20,26,BRL,São Paulo,SP,Brasil,-23.5505,-46.6333,padrão,online,787.57,850.53,827.06
+3,ferramentas,furadeira,763.51,743.23,cancelado,Loja B,2024-08-18,51,EUR,Paris,IL,França,48.8566,2.3522,padrão,online,763.51,815.51,802.85
+4,eletronico,smartphone,735.43,621.97,cancelado,Loja A,2024-08-01,16,EUR,Berlim,BE,Alemanha,52.52,13.405,padrão,online,735.43,764.2,769.38
+5,cozinha,geladeira,1004.63,894.89,pendente,Loja C,2024-08-06,39,USD,Nova York,NY,EUA,40.7128,-74.006,expressa,loja,1004.63,1078.35,1075.75
+6,ferramentas,martelo,378.71,367.97,cancelado,Loja C,2024-09-01,18,USD,Los Angeles,CA,EUA,34.0522,-118.2437,transportadora própria,empresarial,378.71,382.54,413.23
+7,ferramentas,furadeira,102.5,93.81,enviado,Loja A,2024-03-18,29,USD,Nova York,NY,EUA,40.7128,-74.006,padrão,online,102.5,108.42,104.62
+8,ferramentas,furadeira,647.36,588.48,cancelado,Loja A,2024-03-14,32,USD,Nova York,NY,EUA,40.7128,-74.006,expressa,loja,647.36,687.51,704.4
+9,casa,cama,940.4,920.2,cancelado,Loja B,2024-08-04,44,EUR,Paris,IL,França,48.8566,2.3522,padrão,empresarial,940.4,995.79,970.48
+10,cozinha,geladeira,539.94,474.68,pendente,Loja A,2024-12-20,64,USD,Nova York,NY,EUA,40.7128,-74.006,padrão,loja,539.94,566.03,545.81
+11,eletronico,televisão,906.5,767.36,enviado,Loja B,2024-03-17,63,USD,Nova York,NY,EUA,40.7128,-74.006,transportadora própria,empresarial,906.5,927.03,996.25
+12,cozinha,batedeira,221.18,188.91,pendente,Loja B,2024-12-23,73,EUR,Berlim,BE,Alemanha,52.52,13.405,transportadora própria,empresarial,221.18,233.78,228.67
+13,casa,sofá,158.2,135.83,enviado,Loja B,2024-01-16,47,BRL,São Paulo,SP,Brasil,-23.5505,-46.6333,transportadora própria,loja,158.2,163.64,173.13
+14,ferramentas,martelo,965.09,839.64,pendente,Loja B,2024-06-05,45,EUR,Paris,IL,França,48.8566,2.3522,transportadora própria,empresarial,965.09,982.75,1038.84
+15,roupa,calça,831.16,714.15,pendente,Loja A,2024-08-19,83,EUR,Paris,IL,França,48.8566,2.3522,padrão,loja,831.16,885.53,853.14
+16,ferramentas,serra elétrica,100.24,85.18,pendente,Loja B,2024-11-05,60,EUR,Paris,IL,França,48.8566,2.3522,expressa,online,100.24,105.31,102.56
+17,roupa,meias,356.88,330.14,pendente,Loja B,2024-09-09,80,EUR,Paris,IL,França,48.8566,2.3522,padrão,empresarial,356.88,388.67,377.11
+18,eletronico,notebook,310.96,285.77,enviado,Loja C,2024-09-20,16,EUR,Berlim,BE,Alemanha,52.52,13.405,transportadora própria,loja,310.96,322.08,319.4
+19,roupa,camiseta,686.68,597.39,cancelado,Loja A,2024-04-26,64,EUR,Berlim,BE,Alemanha,52.52,13.405,transportadora própria,loja,686.68,701.17,749.36
+20,ferramentas,chave de fenda,744.58,698.82,cancelado,Loja A,2024-06-05,29,USD,Nova York,NY,EUA,40.7128,-74.006,transportadora própria,loja,744.58,763.23,818.16
+21,roupa,casaco,188.41,184.29,cancelado,Loja B,2024-05-22,24,USD,Nova York,NY,EUA,40.7128,-74.006,padrão,online,188.41,203.68,194.96
+22,ferramentas,serra elétrica,975.12,943.14,cancelado,Loja C,2024-06-18,49,BRL,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,transportadora própria,empresarial,975.12,1046.41,1060.68
+23,ferramentas,furadeira,852.65,718.73,pendente,Loja B,2024-02-04,63,USD,Nova York,NY,EUA,40.7128,-74.006,padrão,online,852.65,876.92,922.75
+24,cozinha,liquidificador,643.53,627.42,pendente,Loja A,2024-10-21,59,BRL,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,padrão,online,643.53,689.21,671.2
+25,casa,cadeira,612.06,599.35,cancelado,Loja A,2024-10-16,92,USD,Nova York,NY,EUA,40.7128,-74.006,transportadora própria,online,612.06,656.4,670.72
+26,ferramentas,furadeira,576.95,507.62,pendente,Loja A,2024-08-07,40,EUR,Berlim,BE,Alemanha,52.52,13.405,padrão,online,576.95,627.62,616.46
+27,casa,cadeira,561.69,488.79,cancelado,Loja A,2024-08-13,4,EUR,Berlim,BE,Alemanha,52.52,13.405,padrão,online,561.69,617.46,611.61
+28,cozinha,geladeira,916.83,822.02,pendente,Loja B,2024-07-11,51,EUR,Berlim,BE,Alemanha,52.52,13.405,transportadora própria,online,916.83,943.18,959.6
+29,roupa,meias,267.68,260.81,pendente,Loja B,2024-07-20,46,BRL,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,padrão,loja,267.68,292.13,290.81
+30,eletronico,notebook,705.24,634.68,cancelado,Loja A,2024-06-21,53,EUR,Paris,IL,França,48.8566,2.3522,transportadora própria,empresarial,705.24,727.46,725.36
+31,eletronico,tablet,63.78,60.83,enviado,Loja B,2024-03-10,72,BRL,Curitiba,PR,Brasil,-25.4284,-49.2733,expressa,empresarial,63.78,67.56,65.83
+32,casa,cama,964.33,940.41,enviado,Loja B,2024-03-18,50,EUR,Berlim,BE,Alemanha,52.52,13.405,padrão,empresarial,964.33,975.27,1006.57
+33,cozinha,batedeira,223.51,196.74,cancelado,Loja B,2024-10-03,6,BRL,São Paulo,SP,Brasil,-23.5505,-46.6333,padrão,empresarial,223.51,239.38,245.39
+34,roupa,camiseta,307.17,291.66,pendente,Loja B,2024-01-26,65,BRL,São Paulo,SP,Brasil,-23.5505,-46.6333,padrão,empresarial,307.17,316.92,313.71
+35,eletronico,notebook,735.48,632.86,cancelado,Loja C,2024-09-24,38,USD,Los Angeles,CA,EUA,34.0522,-118.2437,padrão,online,735.48,757.96,805.38
+36,cozinha,geladeira,683.97,646.11,cancelado,Loja B,2024-10-25,67,BRL,São Paulo,SP,Brasil,-23.5505,-46.6333,padrão,online,683.97,745.58,706.14
+37,eletronico,smartphone,489.12,434.97,enviado,Loja A,2024-03-20,82,BRL,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,padrão,online,489.12,499.84,502.32
+38,eletronico,tablet,62.84,56.98,enviado,Loja C,2024-05-16,72,EUR,Paris,IL,França,48.8566,2.3522,padrão,loja,62.84,65.95,68.55
+39,casa,cadeira,55.8,50.29,enviado,Loja C,2024-11-03,30,BRL,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,transportadora própria,loja,55.8,59.39,61.25
+40,roupa,casaco,17.6,16.17,cancelado,Loja C,2024-05-02,7,BRL,Curitiba,PR,Brasil,-25.4284,-49.2733,padrão,empresarial,17.6,19.24,17.88
+41,ferramentas,furadeira,796.74,721.03,cancelado,Loja C,2024-11-28,64,USD,Los Angeles,CA,EUA,34.0522,-118.2437,padrão,loja,796.74,853.93,810.56
+42,roupa,camiseta,273.42,234.9,cancelado,Loja B,2024-07-19,20,BRL,Rio de Janeiro,RJ,Brasil,-22.9068,-43.1729,transportadora própria,online,273.42,280.49,295.68
+43,eletronico,tablet,1007.41,951.08,enviado,Loja A,2024-01-26,21,BRL,São Paulo,SP,Brasil,-23.5505,-46.6333,padrão,loja,1007.41,1067.4,1087.71
+44,casa,cama,720.27,694.73,enviado,Loja A,2024-02-22,7,EUR,Berlim,BE,Alemanha,52.52,13.405,padrão,loja,720.27,737.92,771.55
+45,eletronico,televisão,686.52,596.77,pendente,Loja A,2024-01-11,43,USD,Nova York,NY,EUA,40.7128,-74.006,padrão,empresarial,686.52,748.85,704.59
+46,ferramentas,chave de fenda,365.14,328.47,enviado,Loja C,2024-10-04,31,USD,Nova York,NY,EUA,40.7128,-74.006,expressa,loja,365.14,393.11,379.07
+47,ferramentas,martelo,933.84,779.96,cancelado,Loja B,2024-10-20,15,EUR,Paris,IL,França,48.8566,2.3522,transportadora própria,empresarial,933.84,1006.92,1004.17
+48,casa,sofá,54.04,52.88,enviado,Loja A,2024-09-21,46,USD,Nova York,NY,EUA,40.7128,-74.006,padrão,online,54.04,56.97,59.04
+49,ferramentas,martelo,723.22,647.22,enviado,Loja B,2024-05-03,1,EUR,Paris,IL,França,48.8566,2.3522,transportadora própria,empresarial,723.22,736.82,734.67
+50,eletronico,notebook,603.14,521.62,pendente,Loja A,2024-12-14,93,BRL,Curitiba,PR,Brasil,-25.4284,-49.2733,transportadora própria,empresarial,603.14,648.78,618.55

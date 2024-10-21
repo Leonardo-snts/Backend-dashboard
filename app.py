@@ -1,160 +1,126 @@
-from flask import Flask, jsonify, request
+import streamlit as st
 import pandas as pd
-from flask_cors import CORS
-from opencage.geocoder import OpenCageGeocode
-import dotenv
-import os
+import plotly.express as px
+import plotly.graph_objs as go
 
-app = Flask(__name__)
-CORS(app)  # Habilita o CORS para permitir que o frontend acesse a API
-
-# Função para carregar os dados
+# Carregar os dados CSV gerados anteriormente
+@st.cache_data
 def load_data():
-    amazon_sales = pd.read_csv('data/Amazon Sale Report.csv', low_memory=False)
-    international_sale = pd.read_csv('data/International sale Report.csv')
-    may_2022 = pd.read_csv('data/May-2022.csv')
-    march_2021 = pd.read_csv('data/P  L March 2021.csv')
-    sale_report = pd.read_csv('data/Sale Report.csv')
-    # warehouse_comparison = pd.read_csv('data/Cloud Warehouse Compersion Chart.csv')
-    # expenses = pd.read_csv('data/Expense IIGF.csv')
-    return amazon_sales, international_sale, may_2022, march_2021, sale_report #,warehouse_comparison, expenses
+    return pd.read_csv("data/dados_dash.csv")
 
-# 1. Vendas por Estado (Amazon)
-@app.route('/api/amazon-sales-by-state', methods=['GET'])
-def get_amazon_sales_by_state():
-    amazon_sales, _, _, _, _ = load_data()
-    data = amazon_sales.groupby('ship-state')['Amount'].sum().reset_index()
-    return jsonify(data.to_dict(orient="records"))
+data = load_data()
 
-# 2. Distribuição de Vendas por Categoria
-@app.route('/api/sales-by-category', methods=['GET'])
-def get_sales_by_category():
-    amazon_sales, _, _, _, _ = load_data()
-    data = amazon_sales.groupby('Category')['Amount'].sum().reset_index()
-    return jsonify(data.to_dict(orient="records"))
+# Título da aplicação
+st.title("Análise de Distribuidora de Produtos para E-commerce")
 
-# 3. Vendas ao Longo do Tempo
-@app.route('/api/sales-over-time', methods=['GET'])
-def get_sales_over_time():
-    amazon_sales, _, _, _, _ = load_data()
-    data = amazon_sales.groupby('Date')['Amount'].sum().reset_index()
-    return jsonify(data.to_dict(orient="records"))
+# Mostrar os dados na aplicação
+st.subheader("Visualização dos Dados")
+st.write(data)
 
-# 4. Comparação de Preços MRP (Amazon, Flipkart, Myntra)
-@app.route('/api/price-comparison', methods=['GET'])
-def get_price_comparison():
-    _, _, may_2022, _, _ = load_data()
-    data = may_2022[['Sku', 'Ajio MRP','Amazon FBA MRP', 'Limeroad MRP', 'Paytm MRP', 'Snapdeal MRP','Amazon MRP', 'Flipkart MRP', 'Myntra MRP']]
-    #Ajio MRP,Amazon MRP,Amazon FBA MRP,Flipkart MRP,Limeroad MRP,Myntra MRP,Paytm MRP,Snapdeal MRP
-    return jsonify(data.to_dict(orient="records"))
+# Gráfico 1: Contagem de produtos vendidos por tipo de produto
+st.subheader("Gráfico 1: Contagem de Produtos por Tipo de Produto")
+fig1 = px.histogram(data, x="tipo do produto", title="Contagem de Produtos por Tipo de Produto")
+st.plotly_chart(fig1)\
 
-# 5. Produtos com Maior Estoque
-@app.route('/api/top-stock', methods=['GET'])
-def get_top_stock():
-    # Carregar os dados do sale_report
-    _, _, _, _, sale_report = load_data()
+# Gráfico 2: Distribuição de vendas por loja
+st.subheader("Gráfico 2: Vendas por Loja")
+fig2 = px.histogram(data, x="loja que comprou", title="Distribuição de Vendas por Loja")
+st.plotly_chart(fig2)
 
-    # Agrupar por 'Category' e somar o 'Stock' correspondente
-    category_stock = sale_report.groupby('Category')['Stock'].sum().reset_index()
+# Gráfico 3: Valor total de venda por tipo de produto
+st.subheader("Gráfico 3: Valor Total de Venda por Tipo de Produto")
+fig3 = px.bar(data.groupby('tipo do produto').sum().reset_index(), x="tipo do produto", y="valor de venda", title="Valor Total de Venda por Tipo de Produto")
+st.plotly_chart(fig3)
 
-    # Renomear as colunas para uma representação mais clara
-    category_stock = category_stock.rename(columns={'Category': 'Categoria', 'Stock': 'Estoque'})
+# Gráfico 4: Valor de compra vs valor de venda (scatter plot)
+st.subheader("Gráfico 4: Comparação de Valor de Compra vs Valor de Venda")
+fig4 = px.scatter(data, x="valor de compra", y="valor de venda", color="tipo do produto", title="Valor de Compra vs Valor de Venda")
+st.plotly_chart(fig4)
 
-    # Retornar os dados em formato JSON
-    return jsonify(category_stock.to_dict(orient="records"))
+# Gráfico 5: Quantidade comprada por loja
+st.subheader("Gráfico 5: Quantidade Comprada por Loja")
+fig5 = px.bar(data.groupby('loja que comprou').sum().reset_index(), x="loja que comprou", y="quantidade comprada", title="Quantidade Comprada por Loja")
+st.plotly_chart(fig5)
 
-# 6. Vendas por Estilo ao Longo do Tempo
-@app.route('/api/sales-qty-over-time', methods=['GET'])
-def get_sales_by_time():
-    # Parâmetro para definir o agrupamento (dia, mês ou ano)
-    group_by = request.args.get('group_by', 'D')  # O padrão será 'D' (dia)
+# Gráfico 6: Tipos de envio usados nas vendas
+st.subheader("Gráfico 6: Frequência dos Tipos de Envio")
+fig6 = px.pie(data, names="tipo de envio", title="Tipos de Envio")
+st.plotly_chart(fig6)
 
-    amazon_sales, _, _, _, _ = load_data()
+# Gráfico 7: Status de entrega por loja
+st.subheader("Gráfico 7: Status de Entrega por Loja")
+fig7 = px.histogram(data, x="loja que comprou", color="status de entrega", title="Status de Entrega por Loja")
+st.plotly_chart(fig7)
 
-    # Tentar converter a coluna 'Date' para datetime e mostrar erros de conversão
-    amazon_sales['Date'] = pd.to_datetime(amazon_sales['Date'], errors='coerce')
+# Gráfico 8: Quantidade comprada por moeda usada
+st.subheader("Gráfico 8: Quantidade Comprada por Moeda")
+fig8 = px.bar(data.groupby('moeda usada').sum().reset_index(), x="moeda usada", y="quantidade comprada", title="Quantidade Comprada por Moeda Usada")
+st.plotly_chart(fig8)
 
-    # Exibir dados inválidos para debug
-    #invalid_dates = amazon_sales[amazon_sales['Date'].isna()]
-    #print(f"Linhas com datas inválidas: {len(invalid_dates)}")
+# Gráfico 9: Valor de venda total por moeda usada
+st.subheader("Gráfico 9: Valor Total de Venda por Moeda Usada")
+fig9 = px.bar(data.groupby('moeda usada').sum().reset_index(), x="moeda usada", y="valor de venda", title="Valor Total de Venda por Moeda")
+st.plotly_chart(fig9)
 
-    # Remover linhas com datas inválidas (mantendo essa parte para o fluxo normal)
-    amazon_sales = amazon_sales.dropna(subset=['Date'])
+# Gráfico 10: Comparação de preços entre lojas e distribuidora
+st.subheader("Gráfico 10: Comparação de Preços entre Lojas e Distribuidora")
+fig10 = go.Figure()
+fig10.add_trace(go.Box(y=data["preço distribuidora"], name="Distribuidora", boxpoints="all"))
+fig10.add_trace(go.Box(y=data["preço loja 1"], name="Loja 1", boxpoints="all"))
+fig10.add_trace(go.Box(y=data["preço loja 2"], name="Loja 2", boxpoints="all"))
+fig10.update_layout(title="Distribuição de Preços: Distribuidora vs Lojas")
+st.plotly_chart(fig10)
 
-    # Definir a frequência de agrupamento com base no parâmetro
-    if group_by == 'D':  # Dia
-        freq = 'D'
-        output_format = '%Y-%m-%d'
-    elif group_by == 'Y':  # Ano
-        freq = 'YE'
-        output_format = '%Y'
-    else:  # Mês (padrão)
-        freq = 'ME'
-        output_format = '%Y-%m'
+# Gráfico 11: Valor de venda por cidade
+st.subheader("Gráfico 11: Valor de Venda por Cidade de Envio")
+fig11 = px.bar(data.groupby('cidade do envio').sum().reset_index(), x="cidade do envio", y="valor de venda", title="Valor de Venda por Cidade")
+st.plotly_chart(fig11)
 
-    # Agrupar por data (dia, mês ou ano) somando as quantidades vendidas ('Qty')
-    sales_by_time = amazon_sales.groupby(pd.Grouper(key='Date', freq=freq))['Qty'].sum().reset_index()
+# Gráfico 12: Média de valor de venda por tipo de produto (Apenas colunas numéricas)
+st.subheader("Gráfico 12: Média de Valor de Venda por Tipo de Produto")
+numeric_columns = ['valor de venda']  # Especificando as colunas numéricas
+fig12 = px.bar(data.groupby('tipo do produto')[numeric_columns].mean().reset_index(), x="tipo do produto", y="valor de venda", title="Média de Valor de Venda por Tipo de Produto")
+st.plotly_chart(fig12)
 
-    # Renomear a coluna 'Date' para 'Time' e formatar conforme necessário
-    sales_by_time['Time'] = sales_by_time['Date'].dt.strftime(output_format)
+# Gráfico 13: Média de valor de compra por tipo de produto (Apenas colunas numéricas)
+st.subheader("Gráfico 13: Média de Valor de Compra por Tipo de Produto")
+numeric_columns = ['valor de compra']  # Especificando as colunas numéricas
+fig13 = px.bar(data.groupby('tipo do produto')[numeric_columns].mean().reset_index(), x="tipo do produto", y="valor de compra", title="Média de Valor de Compra por Tipo de Produto")
+st.plotly_chart(fig13)
 
-    # Remover a coluna 'Date' e manter apenas 'Time' e 'Qty'
-    sales_by_time = sales_by_time[['Time', 'Qty']]
+# Gráfico 14: Quantidade de produtos comprados por mês
+st.subheader("Gráfico 14: Quantidade Comprada por Mês")
+data['data da venda'] = pd.to_datetime(data['data da venda'])
+data['mes'] = data['data da venda'].dt.month
+fig14 = px.histogram(data, x='mes', y='quantidade comprada', title="Quantidade de Produtos Comprados por Mês")
+st.plotly_chart(fig14)
 
-    # Retornar os dados como JSON
-    return jsonify(sales_by_time.to_dict(orient="records"))
+# Gráfico 15: Canal de venda utilizado
+st.subheader("Gráfico 15: Distribuição dos Canais de Venda")
+fig15 = px.pie(data, names="canal de venda", title="Distribuição dos Canais de Venda")
+st.plotly_chart(fig15)
 
-# 7. Comparação de Preço Original vs Final
-@app.route('/api/price-original-vs-final', methods=['GET'])
-def get_price_original_vs_final():
-    _, _, may_2022, _, _ = load_data()
-    
-    # Selecionar as colunas necessárias
-    data = may_2022[['Sku', 'MRP Old', 'Final MRP Old']].copy()  # Usar .copy() para evitar problemas de "view" vs "copy"
-    
-    # Converter as colunas 'MRP Old' e 'Final MRP Old' para numérico com .loc[]
-    data.loc[:, 'MRP Old'] = pd.to_numeric(data['MRP Old'], errors='coerce')
-    data.loc[:, 'Final MRP Old'] = pd.to_numeric(data['Final MRP Old'], errors='coerce')
+# Gráfico 16: Quantidade comprada por tipo de envio
+st.subheader("Gráfico 16: Quantidade Comprada por Tipo de Envio")
+fig16 = px.bar(data.groupby('tipo de envio').sum(numeric_only=True).reset_index(), x="tipo de envio", y="quantidade comprada", title="Quantidade Comprada por Tipo de Envio")
+st.plotly_chart(fig16)
 
-    # Remover linhas com valores NaN após a conversão
-    data = data.dropna(subset=['MRP Old', 'Final MRP Old'])
+# Gráfico 17: Valor total por status de entrega
+st.subheader("Gráfico 17: Valor Total por Status de Entrega")
+fig17 = px.bar(data.groupby('status de entrega').sum(numeric_only=True).reset_index(), x="status de entrega", y="valor de venda", title="Valor Total por Status de Entrega")
+st.plotly_chart(fig17)
 
-    # Calcular a variação de preço (%)
-    data['Price Variation (%)'] = ((data['Final MRP Old'] - data['MRP Old']) / data['MRP Old']) * 100
+# Gráfico 18: Quantidade de vendas por status de entrega
+st.subheader("Gráfico 18: Quantidade de Vendas por Status de Entrega")
+fig18 = px.histogram(data, x="status de entrega", title="Quantidade de Vendas por Status de Entrega")
+st.plotly_chart(fig18)
 
-    # Retornar os dados como JSON
-    return jsonify(data.to_dict(orient="records"))
+# Gráfico 19: Comparação de valor de venda por canal de venda
+st.subheader("Gráfico 19: Comparação de Valor de Venda por Canal de Venda")
+fig19 = px.bar(data.groupby('canal de venda').sum(numeric_only=True).reset_index(), x="canal de venda", y="valor de venda", title="Comparação de Valor de Venda por Canal de Venda")
+st.plotly_chart(fig19)
 
-# 8. Comparação de Preços entre Plataformas
-@app.route('/api/heat-map', methods=['GET'])
-def get_heat_map():
-    amazon_sales, _, _, _, _ = load_data()
-
-    # gambiarra até trocar os dados
-    country_mapping = {
-        'IN': 'India',
-        # Adicione mais mapeamentos conforme necessário
-    }
-
-    # Aplicando a substituição dos códigos
-    amazon_sales['ship-country'] = amazon_sales['ship-country'].replace(country_mapping)
-
-    # Agrupando por país e somando as vendas
-    data = amazon_sales.groupby('ship-country')['Amount'].sum().reset_index()
-
-    # Convertendo o resultado para um formato apropriado
-    return jsonify(data.to_dict(orient="records"))
-
-
-# 9. Gráfico de produtos por Status
-@app.route('/api/produtos-status', methods=['GET'])
-def get_produtos_status ():
-    amazon_sales, _, _, _, _ = load_data()
-    status_counts = amazon_sales['Status'].value_counts()
-    total = status_counts.sum()
-    status_percentages = (status_counts / total) *100
-    data = status_percentages.reset_index().rename(columns={'index':'Status', 'Status': 'Percentage'})
-    return jsonify(data.to_dict(orient="records"))
-
-if __name__ == '__main__':
-    app.run(debug=True)
+# Gráfico 20: Valor de venda por estado de envio
+st.subheader("Gráfico 20: Valor de Venda por Estado de Envio")
+fig20 = px.bar(data.groupby('estado do envio').sum(numeric_only=True).reset_index(), x="estado do envio", y="valor de venda", title="Valor de Venda por Estado de Envio")
+st.plotly_chart(fig20)
