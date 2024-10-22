@@ -61,7 +61,7 @@ st.plotly_chart(fig8)
 st.subheader("Gráfico 9: Valor Total de Venda por Moeda Usada")
 fig9 = px.bar(data.groupby('moeda usada').sum().reset_index(), x="moeda usada", y="valor de venda", title="Valor Total de Venda por Moeda")
 st.plotly_chart(fig9)
-
+ 
 # Gráfico 10: Comparação de preços entre lojas e distribuidora
 st.subheader("Gráfico 10: Comparação de Preços entre Lojas e Distribuidora")
 fig10 = go.Figure()

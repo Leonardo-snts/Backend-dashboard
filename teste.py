@@ -1,9 +1,9 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, Response
 import pandas as pd
 import plotly.express as px
 import plotly.io as pio
 import plotly.graph_objs as go
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 CORS(app)
@@ -14,15 +14,12 @@ def load_data():
 
 data = load_data()
 
-# Endpoint para o gráfico 1
 @app.route('/grafico1', methods=['GET'])
 def grafico1():
     fig = px.histogram(data, x="tipo do produto", title="1. Contagem de Produtos por Tipo de Produto")
     graph_json = pio.to_json(fig)
     return jsonify(graph_json)
 
-# Adicionar mais endpoints para outros gráficos conforme necessário
-# Exemplo para gráfico 2:
 @app.route('/grafico2', methods=['GET'])
 def grafico2():
     fig = px.histogram(data, x="loja que comprou", title="2. Distribuição de Vendas por Loja")
@@ -143,6 +140,105 @@ def grafico19():
 def grafico20():
     fig = px.bar(data.groupby('estado do envio').sum(numeric_only=True).reset_index(), x="estado do envio", y="valor de venda", title="20. Valor de Venda por Estado de Envio")
     graph_json = pio.to_json(fig)
+    return jsonify(graph_json)
+
+# Função para criar o gráfico baseado na seleção
+def create_heatmap(df, level):
+    if level == 'cidade':
+        fig = px.scatter_geo(
+            df,
+            lat='latitude',
+            lon='longitude',
+            size='quantidade comprada',
+            color='quantidade comprada',
+            hover_name='cidade do envio',
+            title="Mapa de Calor por Cidade",
+            projection="natural earth"
+        )
+    elif level == 'estado':
+        fig = px.scatter_geo(
+            df,
+            locations='estado do envio',
+            locationmode='USA-states',  # Usa os estados dos EUA, mas ajusta para outros países
+            size='quantidade comprada',
+            color='quantidade comprada',
+            hover_name='estado do envio',
+            title="Mapa de Calor por Estado",
+            projection="natural earth"
+        )
+    else:  # País
+        fig = px.scatter_geo(
+            df,
+            locations='pais do envio',
+            locationmode='country names',
+            size='quantidade comprada',
+            color='quantidade comprada',
+            hover_name='pais do envio',
+            title="Mapa de Calor por País",
+            projection="natural earth"
+        )
+    
+    fig.update_geos(showcountries=True, showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="lightgray")
+    return fig
+
+@app.route('/grafico21', methods=['GET'])
+@cross_origin()
+def grafico21():
+    # Agrupar os dados por diferentes níveis
+    data_city = data.groupby(['cidade do envio', 'latitude', 'longitude']).sum().reset_index()
+    data_state = data.groupby(['estado do envio', 'pais do envio']).sum().reset_index()
+    data_country = data.groupby(['pais do envio']).sum().reset_index()
+
+    # Criar o layout inicial
+    fig = create_heatmap(data_city, 'cidade')
+
+    # Adicionar um dropdown para selecionar cidade, estado ou país
+    fig.update_layout(
+        updatemenus=[
+            dict(
+                buttons=[
+                    dict(
+                        args=[{"data": [go.Scattergeo(
+                            lat=data_city['latitude'],
+                            lon=data_city['longitude'],
+                            marker=dict(size=data_city['quantidade comprada'], color=data_city['quantidade comprada'], colorscale="Viridis"),
+                            hovertext=data_city['cidade do envio'],
+                        )]}],
+                        label="Cidade",
+                        method="update"
+                    ),
+                    dict(
+                        args=[{"data": [go.Scattergeo(
+                            locations=data_state['estado do envio'],
+                            locationmode='country names',  # Ajustado para funcionar com estados de qualquer país
+                            marker=dict(size=data_state['quantidade comprada'], color=data_state['quantidade comprada'], colorscale="Viridis"),
+                            hovertext=data_state['estado do envio'],
+                        )]}],
+                        label="Estado",
+                        method="update"
+                    ),
+                    dict(
+                        args=[{"data": [go.Scattergeo(
+                            locations=data_country['pais do envio'],
+                            locationmode='country names',
+                            marker=dict(size=data_country['quantidade comprada'], color=data_country['quantidade comprada'], colorscale="Viridis"),
+                            hovertext=data_country['pais do envio'],
+                        )]}],
+                        label="País",
+                        method="update"
+                    ),
+                ],
+                direction="down",
+                pad={"r": 10, "t": 10},
+                showactive=True,
+            ),
+        ]
+    )
+
+    # Converter o gráfico para JSON
+    graph_json = pio.to_json(fig)
+    
+    # Retornar o JSON como resposta
     return jsonify(graph_json)
 
 if __name__ == '__main__':
