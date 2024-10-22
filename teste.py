@@ -1,245 +1,126 @@
-from flask import Flask, jsonify, Response
+import streamlit as st
 import pandas as pd
 import plotly.express as px
-import plotly.io as pio
 import plotly.graph_objs as go
-from flask_cors import CORS, cross_origin
 
-app = Flask(__name__)
-CORS(app)
-
-# Função para carregar dados
+# Carregar os dados CSV gerados anteriormente
+@st.cache_data
 def load_data():
     return pd.read_csv("data/dados_dash.csv")
 
 data = load_data()
 
-@app.route('/grafico1', methods=['GET'])
-def grafico1():
-    fig = px.histogram(data, x="tipo do produto", title="1. Contagem de Produtos por Tipo de Produto")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Título da aplicação
+st.title("Análise de Distribuidora de Produtos para E-commerce")
 
-@app.route('/grafico2', methods=['GET'])
-def grafico2():
-    fig = px.histogram(data, x="loja que comprou", title="2. Distribuição de Vendas por Loja")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Mostrar os dados na aplicação
+st.subheader("Visualização dos Dados")
+st.write(data)
 
-@app.route('/grafico3', methods=['GET'])
-def grafico3():
-    fig =  px.bar(data.groupby('tipo do produto').sum().reset_index(), x="tipo do produto", y="valor de venda", title="3. Valor Total de Venda por Tipo de Produto")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 1: Contagem de produtos vendidos por tipo de produto
+st.subheader("Gráfico 1: Contagem de Produtos por Tipo de Produto")
+fig1 = px.histogram(data, x="tipo do produto", title="Contagem de Produtos por Tipo de Produto")
+st.plotly_chart(fig1)\
 
-@app.route('/grafico4', methods=['GET'])
-def grafico4():
-    fig =  px.scatter(data, x="valor de compra", y="valor de venda", color="tipo do produto", title="4. Valor de Compra vs Valor de Venda")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 2: Distribuição de vendas por loja
+st.subheader("Gráfico 2: Vendas por Loja")
+fig2 = px.histogram(data, x="loja que comprou", title="Distribuição de Vendas por Loja")
+st.plotly_chart(fig2)
 
-@app.route('/grafico5', methods=['GET'])
-def grafico5():
-    fig =  px.bar(data.groupby('loja que comprou').sum().reset_index(), x="loja que comprou", y="quantidade comprada", title="5. Quantidade Comprada por Loja")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 3: Valor total de venda por tipo de produto
+st.subheader("Gráfico 3: Valor Total de Venda por Tipo de Produto")
+fig3 = px.bar(data.groupby('tipo do produto').sum().reset_index(), x="tipo do produto", y="valor de venda", title="Valor Total de Venda por Tipo de Produto")
+st.plotly_chart(fig3)
 
-@app.route('/grafico6', methods=['GET'])
-def grafico6():
-    fig =  px.pie(data, names="tipo de envio", title="6. Tipos de Envio")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 4: Valor de compra vs valor de venda (scatter plot)
+st.subheader("Gráfico 4: Comparação de Valor de Compra vs Valor de Venda")
+fig4 = px.scatter(data, x="valor de compra", y="valor de venda", color="tipo do produto", title="Valor de Compra vs Valor de Venda")
+st.plotly_chart(fig4)
 
-@app.route('/grafico7', methods=['GET'])
-def grafico7():
-    fig =  px.histogram(data, x="loja que comprou", color="status de entrega", title="7. Status de Entrega por Loja")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 5: Quantidade comprada por loja
+st.subheader("Gráfico 5: Quantidade Comprada por Loja")
+fig5 = px.bar(data.groupby('loja que comprou').sum().reset_index(), x="loja que comprou", y="quantidade comprada", title="Quantidade Comprada por Loja")
+st.plotly_chart(fig5)
 
-@app.route('/grafico8', methods=['GET'])
-def grafico8():
-    fig =  px.bar(data.groupby('moeda usada').sum().reset_index(), x="moeda usada", y="quantidade comprada", title="8. Quantidade Comprada por Moeda Usada")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 6: Tipos de envio usados nas vendas
+st.subheader("Gráfico 6: Frequência dos Tipos de Envio")
+fig6 = px.pie(data, names="tipo de envio", title="Tipos de Envio")
+st.plotly_chart(fig6)
 
-@app.route('/grafico9', methods=['GET'])
-def grafico9():
-    fig =  px.bar(data.groupby('moeda usada').sum().reset_index(), x="moeda usada", y="valor de venda", title="9. Valor Total de Venda por Moeda")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 7: Status de entrega por loja
+st.subheader("Gráfico 7: Status de Entrega por Loja")
+fig7 = px.histogram(data, x="loja que comprou", color="status de entrega", title="Status de Entrega por Loja")
+st.plotly_chart(fig7)
 
-@app.route('/grafico10', methods=['GET'])
-def grafico10():
-    fig =  go.Figure()
-    fig.add_trace(go.Box(y=data["preço distribuidora"], name="Distribuidora", boxpoints="all"))
-    fig.add_trace(go.Box(y=data["preço loja 1"], name="Loja 1", boxpoints="all"))
-    fig.add_trace(go.Box(y=data["preço loja 2"], name="Loja 2", boxpoints="all"))
-    fig.update_layout(title="10. Distribuição de Preços: Distribuidora vs Lojas")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 8: Quantidade comprada por moeda usada
+st.subheader("Gráfico 8: Quantidade Comprada por Moeda")
+fig8 = px.bar(data.groupby('moeda usada').sum().reset_index(), x="moeda usada", y="quantidade comprada", title="Quantidade Comprada por Moeda Usada")
+st.plotly_chart(fig8)
 
-@app.route('/grafico11', methods=['GET'])
-def grafico11():
-    fig = px.bar(data.groupby('cidade do envio').sum().reset_index(), x="cidade do envio", y="valor de venda", title="11. Valor de Venda por Cidade")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 9: Valor de venda total por moeda usada
+st.subheader("Gráfico 9: Valor Total de Venda por Moeda Usada")
+fig9 = px.bar(data.groupby('moeda usada').sum().reset_index(), x="moeda usada", y="valor de venda", title="Valor Total de Venda por Moeda")
+st.plotly_chart(fig9)
+ 
+# Gráfico 10: Comparação de preços entre lojas e distribuidora
+st.subheader("Gráfico 10: Comparação de Preços entre Lojas e Distribuidora")
+fig10 = go.Figure()
+fig10.add_trace(go.Box(y=data["preço distribuidora"], name="Distribuidora", boxpoints="all"))
+fig10.add_trace(go.Box(y=data["preço loja 1"], name="Loja 1", boxpoints="all"))
+fig10.add_trace(go.Box(y=data["preço loja 2"], name="Loja 2", boxpoints="all"))
+fig10.update_layout(title="Distribuição de Preços: Distribuidora vs Lojas")
+st.plotly_chart(fig10)
 
-@app.route('/grafico12', methods=['GET'])
-def grafico12():
-    numeric_columns = ['valor de venda']  # Especificando as colunas numéricas
-    fig = px.bar(data.groupby('tipo do produto')[numeric_columns].mean().reset_index(), x="tipo do produto", y="valor de venda", title="12. Média de Valor de Venda por Tipo de Produto")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 11: Valor de venda por cidade
+st.subheader("Gráfico 11: Valor de Venda por Cidade de Envio")
+fig11 = px.bar(data.groupby('cidade do envio').sum().reset_index(), x="cidade do envio", y="valor de venda", title="Valor de Venda por Cidade")
+st.plotly_chart(fig11)
 
-@app.route('/grafico13', methods=['GET'])
-def grafico13():
-    numeric_columns = ['valor de compra']  # Especificando as colunas numéricas
-    fig = px.bar(data.groupby('tipo do produto')[numeric_columns].mean().reset_index(), x="tipo do produto", y="valor de compra", title="13. Média de Valor de Compra por Tipo de Produto")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 12: Média de valor de venda por tipo de produto (Apenas colunas numéricas)
+st.subheader("Gráfico 12: Média de Valor de Venda por Tipo de Produto")
+numeric_columns = ['valor de venda']  # Especificando as colunas numéricas
+fig12 = px.bar(data.groupby('tipo do produto')[numeric_columns].mean().reset_index(), x="tipo do produto", y="valor de venda", title="Média de Valor de Venda por Tipo de Produto")
+st.plotly_chart(fig12)
 
-@app.route('/grafico14', methods=['GET'])
-def grafico14():
-    data['data da venda'] = pd.to_datetime(data['data da venda'])
-    data['mes'] = data['data da venda'].dt.month
-    fig = px.histogram(data, x='mes', y='quantidade comprada', title="14. Quantidade de Produtos Comprados por Mês")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 13: Média de valor de compra por tipo de produto (Apenas colunas numéricas)
+st.subheader("Gráfico 13: Média de Valor de Compra por Tipo de Produto")
+numeric_columns = ['valor de compra']  # Especificando as colunas numéricas
+fig13 = px.bar(data.groupby('tipo do produto')[numeric_columns].mean().reset_index(), x="tipo do produto", y="valor de compra", title="Média de Valor de Compra por Tipo de Produto")
+st.plotly_chart(fig13)
 
-@app.route('/grafico15', methods=['GET'])
-def grafico15():
-    fig = px.pie(data, names="canal de venda", title="15. Distribuição dos Canais de Venda")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 14: Quantidade de produtos comprados por mês
+st.subheader("Gráfico 14: Quantidade Comprada por Mês")
+data['data da venda'] = pd.to_datetime(data['data da venda'])
+data['mes'] = data['data da venda'].dt.month
+fig14 = px.histogram(data, x='mes', y='quantidade comprada', title="Quantidade de Produtos Comprados por Mês")
+st.plotly_chart(fig14)
 
-@app.route('/grafico16', methods=['GET'])
-def grafico16():
-    fig = px.bar(data.groupby('tipo de envio').sum(numeric_only=True).reset_index(), x="tipo de envio", y="quantidade comprada", title="16. Quantidade Comprada por Tipo de Envio")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 15: Canal de venda utilizado
+st.subheader("Gráfico 15: Distribuição dos Canais de Venda")
+fig15 = px.pie(data, names="canal de venda", title="Distribuição dos Canais de Venda")
+st.plotly_chart(fig15)
 
-@app.route('/grafico17', methods=['GET'])
-def grafico17():
-    fig = px.bar(data.groupby('status de entrega').sum(numeric_only=True).reset_index(), x="status de entrega", y="valor de venda", title="17. Valor Total por Status de Entrega")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 16: Quantidade comprada por tipo de envio
+st.subheader("Gráfico 16: Quantidade Comprada por Tipo de Envio")
+fig16 = px.bar(data.groupby('tipo de envio').sum(numeric_only=True).reset_index(), x="tipo de envio", y="quantidade comprada", title="Quantidade Comprada por Tipo de Envio")
+st.plotly_chart(fig16)
 
-@app.route('/grafico18', methods=['GET'])
-def grafico18():
-    fig = px.histogram(data, x="status de entrega", title="18. Quantidade de Vendas por Status de Entrega")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 17: Valor total por status de entrega
+st.subheader("Gráfico 17: Valor Total por Status de Entrega")
+fig17 = px.bar(data.groupby('status de entrega').sum(numeric_only=True).reset_index(), x="status de entrega", y="valor de venda", title="Valor Total por Status de Entrega")
+st.plotly_chart(fig17)
 
-@app.route('/grafico19', methods=['GET'])
-def grafico19():
-    fig = px.bar(data.groupby('canal de venda').sum(numeric_only=True).reset_index(), x="canal de venda", y="valor de venda", title="19. Comparação de Valor de Venda por Canal de Venda")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 18: Quantidade de vendas por status de entrega
+st.subheader("Gráfico 18: Quantidade de Vendas por Status de Entrega")
+fig18 = px.histogram(data, x="status de entrega", title="Quantidade de Vendas por Status de Entrega")
+st.plotly_chart(fig18)
 
-@app.route('/grafico20', methods=['GET'])
-def grafico20():
-    fig = px.bar(data.groupby('estado do envio').sum(numeric_only=True).reset_index(), x="estado do envio", y="valor de venda", title="20. Valor de Venda por Estado de Envio")
-    graph_json = pio.to_json(fig)
-    return jsonify(graph_json)
+# Gráfico 19: Comparação de valor de venda por canal de venda
+st.subheader("Gráfico 19: Comparação de Valor de Venda por Canal de Venda")
+fig19 = px.bar(data.groupby('canal de venda').sum(numeric_only=True).reset_index(), x="canal de venda", y="valor de venda", title="Comparação de Valor de Venda por Canal de Venda")
+st.plotly_chart(fig19)
 
-# Função para criar o gráfico baseado na seleção
-def create_heatmap(df, level):
-    if level == 'cidade':
-        fig = px.scatter_geo(
-            df,
-            lat='latitude',
-            lon='longitude',
-            size='quantidade comprada',
-            color='quantidade comprada',
-            hover_name='cidade do envio',
-            title="Mapa de Calor por Cidade",
-            projection="natural earth"
-        )
-    elif level == 'estado':
-        fig = px.scatter_geo(
-            df,
-            locations='estado do envio',
-            locationmode='USA-states',  # Usa os estados dos EUA, mas ajusta para outros países
-            size='quantidade comprada',
-            color='quantidade comprada',
-            hover_name='estado do envio',
-            title="Mapa de Calor por Estado",
-            projection="natural earth"
-        )
-    else:  # País
-        fig = px.scatter_geo(
-            df,
-            locations='pais do envio',
-            locationmode='country names',
-            size='quantidade comprada',
-            color='quantidade comprada',
-            hover_name='pais do envio',
-            title="Mapa de Calor por País",
-            projection="natural earth"
-        )
-    
-    fig.update_geos(showcountries=True, showcoastlines=True, coastlinecolor="Black", showland=True, landcolor="lightgray")
-    return fig
-
-@app.route('/grafico21', methods=['GET'])
-@cross_origin()
-def grafico21():
-    # Agrupar os dados por diferentes níveis
-    data_city = data.groupby(['cidade do envio', 'latitude', 'longitude']).sum().reset_index()
-    data_state = data.groupby(['estado do envio', 'pais do envio']).sum().reset_index()
-    data_country = data.groupby(['pais do envio']).sum().reset_index()
-
-    # Criar o layout inicial
-    fig = create_heatmap(data_city, 'cidade')
-
-    # Adicionar um dropdown para selecionar cidade, estado ou país
-    fig.update_layout(
-        updatemenus=[
-            dict(
-                buttons=[
-                    dict(
-                        args=[{"data": [go.Scattergeo(
-                            lat=data_city['latitude'],
-                            lon=data_city['longitude'],
-                            marker=dict(size=data_city['quantidade comprada'], color=data_city['quantidade comprada'], colorscale="Viridis"),
-                            hovertext=data_city['cidade do envio'],
-                        )]}],
-                        label="Cidade",
-                        method="update"
-                    ),
-                    dict(
-                        args=[{"data": [go.Scattergeo(
-                            locations=data_state['estado do envio'],
-                            locationmode='country names',  # Ajustado para funcionar com estados de qualquer país
-                            marker=dict(size=data_state['quantidade comprada'], color=data_state['quantidade comprada'], colorscale="Viridis"),
-                            hovertext=data_state['estado do envio'],
-                        )]}],
-                        label="Estado",
-                        method="update"
-                    ),
-                    dict(
-                        args=[{"data": [go.Scattergeo(
-                            locations=data_country['pais do envio'],
-                            locationmode='country names',
-                            marker=dict(size=data_country['quantidade comprada'], color=data_country['quantidade comprada'], colorscale="Viridis"),
-                            hovertext=data_country['pais do envio'],
-                        )]}],
-                        label="País",
-                        method="update"
-                    ),
-                ],
-                direction="down",
-                pad={"r": 10, "t": 10},
-                showactive=True,
-            ),
-        ]
-    )
-
-    # Converter o gráfico para JSON
-    graph_json = pio.to_json(fig)
-    
-    # Retornar o JSON como resposta
-    return jsonify(graph_json)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+# Gráfico 20: Valor de venda por estado de envio
+st.subheader("Gráfico 20: Valor de Venda por Estado de Envio")
+fig20 = px.bar(data.groupby('estado do envio').sum(numeric_only=True).reset_index(), x="estado do envio", y="valor de venda", title="Valor de Venda por Estado de Envio")
+st.plotly_chart(fig20)
