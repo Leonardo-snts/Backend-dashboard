@@ -2,6 +2,7 @@ from flask import jsonify, Blueprint
 import pandas as pd
 from api.funcao import data
 from flask_cors import cross_origin
+import numpy as np
 
 api = Blueprint('api', __name__)
 
@@ -132,16 +133,13 @@ def grafico20():
     sales_by_shipping_state.columns = ['estado_envio', 'valor_total_venda']
     return jsonify(sales_by_shipping_state.to_dict(orient="records"))
 
-@api.route('/grafico21', methods=['GET'])
-@cross_origin()
-def grafico21():
-    data_city = data.groupby(['cidade do envio', 'latitude', 'longitude'])['quantidade comprada'].sum().reset_index()
-    data_state = data.groupby(['estado do envio', 'pais do envio'])['quantidade comprada'].sum().reset_index()
-    data_country = data.groupby(['pais do envio'])['quantidade comprada'].sum().reset_index()
+@api.route('/grafico21')
+def get_data():
+    # Exemplo de dados de matriz para o mapa de calor
+    data = np.random.rand(10, 10)  # 10x10 matriz de dados aleatórios
+    df = pd.DataFrame(data, columns=[f"Col_{i}" for i in range(10)], index=[f"Row_{i}" for i in range(10)])
 
-    data_levels = {
-        "cidade": data_city.to_dict(orient="records"),
-        "estado": data_state.to_dict(orient="records"),
-        "pais": data_country.to_dict(orient="records"),
-    }
-    return jsonify(data_levels)
+    # Convertendo DataFrame para JSON
+    result = df.to_dict(orient="split")
+    return jsonify(result)
+
