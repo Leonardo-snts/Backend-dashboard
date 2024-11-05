@@ -60,11 +60,32 @@ def grafico9():
 
 @api.route('/grafico10', methods=['GET'])
 def grafico10():
+    # Calcular a média dos preços nas lojas
+    media_loja1 = data["preço loja 1"].mean()
+    media_loja2 = data["preço loja 2"].mean()
+    
+    # Preço médio da distribuidora
+    preco_distribuidora = data["preço distribuidora"].mean()
+    
+    # Criar uma lista para armazenar os preços e as diferenças
+    x_labels = ['Distribuidora', 'Loja 1', 'Loja 2']
+    y_values = [preco_distribuidora, media_loja1, media_loja2]
+
+    # Criar um dicionário para armazenar os dados
     price_data = {
-        "distribuidora": data["preço distribuidora"].tolist(),
-        "loja1": data["preço loja 1"].tolist(),
-        "loja2": data["preço loja 2"].tolist(),
+        "x": x_labels,  # Eixo X
+        "y": y_values,  # Eixo Y
+        "diferenca_loja1": media_loja1 - preco_distribuidora,
+        "diferenca_loja2": media_loja2 - preco_distribuidora,
+        "media_loja1": media_loja1,
+        "media_loja2": media_loja2,
+        "preco_distribuidora": preco_distribuidora
     }
+    
+    # Adicionando informações sobre a diferença
+    price_data["diferenca_loja1_str"] = f"Loja 1 tem o preço {abs(price_data['diferenca_loja1']):.2f} reais {'maior' if price_data['diferenca_loja1'] > 0 else 'menor'} que a distribuidora."
+    price_data["diferenca_loja2_str"] = f"Loja 2 tem o preço {abs(price_data['diferenca_loja2']):.2f} reais {'maior' if price_data['diferenca_loja2'] > 0 else 'menor'} que a distribuidora."
+
     return jsonify(price_data)
 
 @api.route('/grafico11', methods=['GET'])
