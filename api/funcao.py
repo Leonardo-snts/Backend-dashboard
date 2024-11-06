@@ -4,7 +4,7 @@ import pandas as pd
 
 # Função para carregar os daos da tabela csv
 def load_data():
-    return pd.read_csv("data/dados_dash.csv")
+    return pd.read_csv("data/dados_dash2.csv")
 
 data = load_data()
 

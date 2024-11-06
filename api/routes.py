@@ -134,12 +134,19 @@ def grafico20():
     return jsonify(sales_by_shipping_state.to_dict(orient="records"))
 
 @api.route('/grafico21')
-def get_data():
-    # Exemplo de dados de matriz para o mapa de calor
-    data = np.random.rand(10, 10)  # 10x10 matriz de dados aleatórios
-    df = pd.DataFrame(data, columns=[f"Col_{i}" for i in range(10)], index=[f"Row_{i}" for i in range(10)])
+def sales_heatmap():
+    city_data = data.groupby(
+        ['cidade do envio', 'latitude', 'longitude']
+    )['quantidade comprada'].sum().reset_index()
+    
+    # Agrupa por país, ignorando cidades e estados
+    country_data = data.groupby('pais do envio')['quantidade comprada'].sum().reset_index()
+    country_data.rename(columns={'pais do envio': 'country'}, inplace=True)
 
-    # Convertendo DataFrame para JSON
-    result = df.to_dict(orient="split")
+    # Converte para JSON com diferentes agrupamentos
+    result = {
+        "cities": city_data.to_dict(orient="records"),
+        "countries": country_data.to_dict(orient="records")
+    }
+
     return jsonify(result)
-

@@ -22,17 +22,17 @@ stores = ["Loja A", "Loja B", "Loja C"]
 
 # Moedas e cidades
 locations_brl = [
-    {"city": "São Paulo", "state": "SP", "country": "Brasil", "lat": -23.5505, "long": -46.6333},
-    {"city": "Rio de Janeiro", "state": "RJ", "country": "Brasil", "lat": -22.9068, "long": -43.1729},
-    {"city": "Curitiba", "state": "PR", "country": "Brasil", "lat": -25.4284, "long": -49.2733},
+    {"city": "São Paulo", "state": "SP", "country": "Brazil", "lat": -23.5505, "long": -46.6333},
+    {"city": "Rio de Janeiro", "state": "RJ", "country": "Brazil", "lat": -22.9068, "long": -43.1729},
+    {"city": "Curitiba", "state": "PR", "country": "Brazil", "lat": -25.4284, "long": -49.2733},
 ]
 locations_usd = [
-    {"city": "Nova York", "state": "NY", "country": "EUA", "lat": 40.7128, "long": -74.0060},
-    {"city": "Los Angeles", "state": "CA", "country": "EUA", "lat": 34.0522, "long": -118.2437},
+    {"city": "Nova York", "state": "NY", "country": "United States", "lat": 40.7128, "long": -74.0060},
+    {"city": "Los Angeles", "state": "CA", "country": "United States", "lat": 34.0522, "long": -118.2437},
 ]
 locations_eur = [
-    {"city": "Berlim", "state": "BE", "country": "Alemanha", "lat": 52.5200, "long": 13.4050},
-    {"city": "Paris", "state": "IL", "country": "França", "lat": 48.8566, "long": 2.3522},
+    {"city": "Berlim", "state": "BE", "country": "Germany", "lat": 52.5200, "long": 13.4050},
+    {"city": "Paris", "state": "IL", "country": "France", "lat": 48.8566, "long": 2.3522},
 ]
 
 shipping_types = ["padrão", "expressa", "transportadora própria"]
@@ -44,7 +44,7 @@ currencies = {
     "EUR": locations_eur
 }
 
-def gerar_dados_distribuidora(num_rows=50, output_file="data/dados_dash.csv"):
+def gerar_dados_distribuidora(num_rows=50, output_file="data/dados_dash2.csv"):
     rows = []
     for i in range(1, num_rows + 1):
         category = choice(list(categories.keys()))
@@ -89,5 +89,5 @@ def gerar_dados_distribuidora(num_rows=50, output_file="data/dados_dash.csv"):
         writer.writerows(rows)
 
 # Executar a função
-gerar_dados_distribuidora(output_file="data/dados_dash.csv")
-print('Dados gerados com sucesso e salvo em data/dados_dash.csv')
+gerar_dados_distribuidora(output_file="data/dados_dash2.csv")
+print('Dados gerados com sucesso e salvo em data/dados_dash2.csv')
